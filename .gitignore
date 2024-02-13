@@ -1,0 +1,5 @@
+.venv/
+.ipynb_checkpoints/
+
+# SAP AI Core credentials
+default_aicore.json
