@@ -12,9 +12,3 @@ github.token
 /tf_files/label_encoded_classes.npy
 /tf_files/model.h5
 /tf_files/tokens.json
-
-# Server files
-/server/Dockerfile
-/server/requirements.txt
-/server/tf_template.py
-/server/serve.py
