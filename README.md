@@ -24,8 +24,11 @@ This is step 4 from the tutorial.
 ### 7. Set up serving code
 cd server
 sudo docker login docker.io  # Password is the Personal Access Token
-sudo docker build -t docker.io/gsalomone/movie-review-clf-serve:0.0.1 .
-sudo docker push docker.io/gsalomone/movie-review-clf-serve:0.0.1  
+sudo docker build -t docker.io/gsalomone/movie-review-clf-serve:0.0.2 .
+sudo docker push docker.io/gsalomone/movie-review-clf-serve:0.0.2  
 
 - Modify requirements to install latest versions
 - Use flag `--ignore-installed` in Dockerfile
+
+### 8. Create deployment
+Create, start and check status, following steps 8, 9, 10
