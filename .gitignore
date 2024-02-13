@@ -4,6 +4,9 @@
 # SAP AI Core credentials
 default_aicore.json
 
+# GitHub token
+github.token
+
 # Tensor flow project files
 /tf_files/max_pad_len.txt
 /tf_files/label_encoded_classes.npy
