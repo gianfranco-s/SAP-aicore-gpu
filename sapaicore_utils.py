@@ -47,7 +47,11 @@ def onboard_repository(github_repo_url: str,
     return response.message
 
 
-def onboard_docker(docker_user: str, docker_token: str, ai_core_client: AICoreV2Client, docker_url: str = 'https://index.docker.io') -> str:
+def onboard_docker(docker_registry_name: str,
+                   docker_user: str,
+                   docker_token: str,
+                   ai_core_client: AICoreV2Client,
+                   docker_url: str = 'https://index.docker.io') -> str:
     docker_auth_data = {
         'auths': {
             docker_url: {
@@ -58,7 +62,7 @@ def onboard_docker(docker_user: str, docker_token: str, ai_core_client: AICoreV2
     }
 
     response = ai_core_client.docker_registry_secrets.create(
-        name = "gsalomone-docker",
+        name = docker_registry_name,
         data = {
             ".dockerconfigjson": json.dumps(docker_auth_data)
         }
