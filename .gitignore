@@ -4,8 +4,11 @@
 # SAP AI Core credentials
 default_aicore.json
 
-# GitHub token
-github.token
+# GitHub credentials
+github.creds
+
+# Docker credentials
+docker.creds
 
 # Tensor flow project files
 /tf_files/max_pad_len.txt
