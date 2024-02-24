@@ -19,18 +19,50 @@ DOCKER_USER = os.getenv('DOCKER_USER')
 DOCKER_TOKEN = os.getenv('DOCKER_TOKEN')
 
 
+def get_conn_details(path_to_credentials: str = 'default_aicore.json') -> dict:
+    with open(path_to_credentials, 'r') as f:
+        credentials = json.load(f)
+
+    return {
+        'base_url': credentials.get('serviceurls').get('AI_API_URL') + '/v2',
+        'auth_url': credentials.get('url') + "/oauth/token",
+        'client_id': credentials.get('clientid'),
+        'client_secret': credentials.get('clientsecret'),
+    }
+
+
 def onboard_repository(github_repo_url: str,
                        github_account_usr: str,
                        github_token: str,
                        project_name: str,
                        ai_core_client: AICoreV2Client,
                        ) -> str:
+    """ This function allows to clarify naming of attributes. """
     # https://developers.sap.com/tutorials/ai-core-helloworld.html#:~:text=STEP%203-,Onboard%20GitHub%20to%20SAP%20AI%20Core,-SAP%20AI%20Launchpad
     response = ai_core_client.repositories.create(
         name=project_name,
         url=github_repo_url,
         username=github_account_usr,
         password=github_token)
+    return response.message
+
+
+def onboard_docker(docker_user: str, docker_token: str, ai_core_client: AICoreV2Client, docker_url: str = 'https://index.docker.io') -> str:
+    docker_auth_data = {
+        'auths': {
+            docker_url: {
+                'username': docker_user,
+                'password': docker_token
+            }
+        }
+    }
+
+    response = ai_core_client.docker_registry_secrets.create(
+        name = "gsalomone-docker",
+        data = {
+            ".dockerconfigjson": json.dumps(docker_auth_data)
+        }
+    )
     return response.message
 
 
@@ -42,13 +74,8 @@ def show_repositories(ai_core_client: AICoreV2Client) -> None:
         print(message)
 
 
-def get_conn_details(path_to_credentials: str = 'default_aicore.json') -> dict:
-    with open(path_to_credentials, 'r') as f:
-        credentials = json.load(f)
-
-    return {
-        'base_url': credentials.get('serviceurls').get('AI_API_URL') + '/v2',
-        'auth_url': credentials.get('url') + "/oauth/token",
-        'client_id': credentials.get('clientid'),
-        'client_secret': credentials.get('clientsecret'),
-    }
+def show_docker_secrets(ai_core_client: AICoreV2Client) -> None:
+    response = ai_core_client.docker_registry_secrets.query()
+    
+    for secret_name in response.resources:
+        print(secret_name)
