@@ -19,9 +19,9 @@ DOCKER_USER = os.getenv('DOCKER_USER')
 DOCKER_TOKEN = os.getenv('DOCKER_TOKEN')
 
 
-def get_conn_details(path_to_credentials: str = 'default_aicore.json') -> dict:
+def get_conn_details(path_to_credentials: str = BASEDIR + '/default_aicore.json') -> dict:
     with open(path_to_credentials, 'r') as f:
-        credentials = json.load(f)
+        credentials = json.load(f).get('credentials')
 
     return {
         'base_url': credentials.get('serviceurls').get('AI_API_URL') + '/v2',

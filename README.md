@@ -2,6 +2,15 @@
 
 ## Notes
 
+Get `default_aicore.json` credentials
+```
+cf login
+cf target -o baitcon.development -s default
+cf services | grep aicore
+cf service-keys default_aicore 
+cf service-key default_aicore defaultKey_ab3c48d6-47c5-4934-adb4-d4a5575b2aae | sed 1,2d > default_aicore.json
+```
+
 ### 1. Create workspace
 Using default resource group because "Resource Group cannot be created for free tier tenant"
 
