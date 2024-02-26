@@ -78,7 +78,7 @@ def show_repositories(ai_core_client: AICoreV2Client) -> None:
         print(message)
 
 
-def show_docker_secrets(ai_core_client: AICoreV2Client) -> None:
+def show_docker_registries(ai_core_client: AICoreV2Client) -> None:
     response = ai_core_client.docker_registry_secrets.query()
     
     for secret_name in response.resources:
