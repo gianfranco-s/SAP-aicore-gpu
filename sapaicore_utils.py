@@ -18,6 +18,7 @@ GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')
 DOCKER_USER = os.getenv('DOCKER_USER')
 DOCKER_TOKEN = os.getenv('DOCKER_TOKEN')
 
+AWS_CREDENTIALS_PATH = os.path.expanduser("~/.aws/credentials")
 
 def get_conn_details(path_to_credentials: str = BASEDIR + '/default_aicore.json') -> dict:
     with open(path_to_credentials, 'r') as f:
