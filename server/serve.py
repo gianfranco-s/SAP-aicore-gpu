@@ -17,7 +17,7 @@ app = Flask(__name__)
 text_process = None
 model = None
 
-@app.before_first_request
+
 def init():
     """
     Load the model if it is available locally
