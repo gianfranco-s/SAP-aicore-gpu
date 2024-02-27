@@ -12,9 +12,6 @@ app = Flask(__name__)
 
 
 def init():
-    """
-    Load the model if it is available locally
-    """
     available_gpus = tf.config.list_physical_devices('GPU')
     logging.info(f"Num GPUs Available: {len(available_gpus)}")
 
@@ -25,13 +22,7 @@ def init():
 
 
 @app.route("/v1/predict", methods=["POST"])
-def predict():
-    """
-    Perform an inference on the model created in initialize
-
-    Returns:
-        String prediction of the label for the given test data
-    """
+def predict() -> str:
     text_process = app.config['text_process']
     model = app.config['model']
 
