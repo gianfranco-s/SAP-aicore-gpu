@@ -6,7 +6,8 @@ import tensorflow as tf
 from sklearn.preprocessing import LabelEncoder
 from tensorflow import keras
 
-SERVE_PATH = os.environ['SERVE_FILES_PATH']
+DEFAULT_SERVE_PATH = 'tf_files'
+SERVE_PATH = os.environ.get('SERVE_FILES_PATH') or DEFAULT_SERVE_PATH
 AVAILABLE_GPUS = tf.config.list_physical_devices('GPU')
 
 class Model:
@@ -17,9 +18,9 @@ class Model:
 
     def __load_model(self, filename: str = 'model.h5') -> None:
         model_filepath = os.path.join(self.source_path, filename)
-        self.model = keras.models.load_model(model_filepath)
+        self.model = keras.models.load_model(model_filepath, compile=False)
 
-    def predict(self, seq):
+    def predict(self, seq: np.ndarray) -> str:
         '''
         Parameters
         ---
@@ -31,6 +32,7 @@ class Model:
         print(type(self.model.predict(seq)))
         return self.model.predict(seq)
 
+mymodel = Model('tf_files')
 
 class TextProcess:
     """Text Process - pre and post"""
