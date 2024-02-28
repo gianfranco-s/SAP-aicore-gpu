@@ -1,19 +1,13 @@
-import logging
 import os
 
 import numpy as np
+import tensorflow as tf
 
 from sklearn.preprocessing import LabelEncoder
-from tensorflow.keras.models import load_model
-from tensorflow.keras.preprocessing.sequence import pad_sequences
-from tensorflow.keras.preprocessing.text import tokenizer_from_json
-
-FORMAT = "%(asctime)s:%(name)s:%(levelname)s - %(message)s"
-# Use filename="file.log" as a param to logging to log to a file
-logging.basicConfig(format=FORMAT, level=logging.INFO)
+from tensorflow import keras
 
 SERVE_PATH = os.environ['SERVE_FILES_PATH']
-
+AVAILABLE_GPUS = tf.config.list_physical_devices('GPU')
 
 class Model:
     def __init__(self, source_path: str = SERVE_PATH) -> None:
@@ -23,7 +17,7 @@ class Model:
 
     def __load_model(self, filename: str = 'model.h5') -> None:
         model_filepath = os.path.join(self.source_path, filename)
-        self.model = load_model(model_filepath)
+        self.model = keras.models.load_model(model_filepath)
 
     def predict(self, seq):
         '''
@@ -55,7 +49,7 @@ class TextProcess:
     def __get_pad_len(self, filename: str = 'max_pad_len.txt') -> None:
         pad_len_filepath = os.path.join(self.source_path, filename)
         with open(pad_len_filepath) as file:
-          self.max_pad_len = int(file.read())
+            self.max_pad_len = int(file.read())
 
     def __load_label_encoder(self, filename: str = 'label_encoded_classes.npy') -> None:
         encoded_classes_path = os.path.join(self.source_path, filename)
@@ -65,8 +59,8 @@ class TextProcess:
     def __load_tokenizer(self, filename: str = 'tokens.json') -> None:
         tokenizer_path = os.path.join(self.source_path, filename)
         with open(tokenizer_path, 'r') as tokenfile:
-          tokens_info = tokenfile.read()
-        self.tokenizer = tokenizer_from_json(tokens_info)
+            tokens_info = tokenfile.read()
+        self.tokenizer = keras.preprocessing.text.tokenizer_from_json(tokens_info)
 
     def pre_process(self, sentence: str) -> np.ndarray:
         '''Converts sentence to token
@@ -75,16 +69,16 @@ class TextProcess:
         x_seq : numpy.ndarray shape <1, self.max_pad_len>
         '''
         x_seq = self.tokenizer.texts_to_sequences([sentence])
-        return pad_sequences(x_seq, maxlen=self.max_pad_len)
+        return keras.preprocessing.pad_sequences(x_seq, maxlen=self.max_pad_len)
 
     def post_process(self, prediction: np.ndarray) -> dict:
         '''Convert back to orginial class name
 
         Parameters
           prediction: numpy.ndarray (dtype = float32, shape = (1, n_classes) #n_classes captured within the model
-        
+
         Returns:
-          dict 
+          dict
             <predicted_class_name, probability>
             ONLY the maximum confident class
         '''

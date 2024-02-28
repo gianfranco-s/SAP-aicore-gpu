@@ -1,19 +1,14 @@
-import os
-import logging
-
-import tensorflow as tf
-
 from flask import Flask
 from flask import request as call_request
 
-from tf_template import Model, TextProcess
+from tf_template import Model, TextProcess, AVAILABLE_GPUS
 
 app = Flask(__name__)
 
 
-def init():
-    available_gpus = tf.config.list_physical_devices('GPU')
-    logging.info(f"Num GPUs Available: {len(available_gpus)}")
+def initialize_app():
+    
+    app.logger.info(f"Num GPUs Available: {len(AVAILABLE_GPUS)}")
 
     text_process = TextProcess()
     model = Model()
@@ -29,18 +24,20 @@ def predict() -> str:
     input_data = dict(call_request.json)
     text = str(input_data['text'])
 
-    logging.info(f'Requested text: {text}')
+    app.logger.info(f'Requested text: {text}')
     prediction = model.predict(
         text_process.pre_process(text)
     )
 
-    logging.info(f"Prediction: {prediction}")
+    app.logger.info(f"Prediction: {prediction}")
 
     return text_process.post_process(prediction)
 
 
 if __name__ == "__main__":
-    text_process, model = init()
+    with app.app_context():
+        text_process, model = initialize_app()
+
     app.config['text_process'] = text_process
     app.config['model'] = model
     app.run(host="0.0.0.0", debug=True, port=9001)
