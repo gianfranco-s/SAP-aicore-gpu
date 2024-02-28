@@ -32,7 +32,6 @@ class Model:
         print(type(self.model.predict(seq)))
         return self.model.predict(seq)
 
-mymodel = Model('tf_files')
 
 class TextProcess:
     """Text Process - pre and post"""
