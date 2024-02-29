@@ -1,9 +1,13 @@
+import logging
+
 from flask import Flask
 from flask import request as call_request
 
 from tf_template import Model, TextProcess, AVAILABLE_GPUS
 
 app = Flask(__name__)
+app.logger.setLevel(logging.INFO)
+# app.logger.addHandler(logging.FileHandler('server.log'))  # Uncomment to save logs to file `server.log`
 
 
 def initialize_app():
@@ -42,4 +46,21 @@ if __name__ == "__main__":
     app.config['model'] = model
     app.run(host="0.0.0.0", debug=True, port=9001)
 
-# curl --location --request POST 'http://localhost:9001/v1/predict' --header 'Content-Type: application/json' --data-raw '{"text": "A restaurant with great ambiance"}'
+"""
+To run and debug locally:
+1. Install
+   - flask
+   - scikit-learn
+   - tensorflow==2.10.0
+
+2. Run the server
+$ export SERVE_FILES_PATH=tf_files && python server/serve.py 
+
+3. Query the endpoint
+$ curl --location --request POST 'http://localhost:9001/v1/predict' --header 'Content-Type: application/json' --data-raw '{"text": "A restaurant with great ambiance"}'
+
+4. Result should be
+{
+  "negative": 0.5039926171302795
+}
+"""

@@ -35,3 +35,9 @@ Response:
   "negative": 0.5039926171302795
 }
 ```
+
+Add logger:
+- In serve.py
+
+Update images:
+- In `Set up serving code`: 
