@@ -1,77 +1,45 @@
-# -*- coding: utf-8 -*-
-"""
-Inference script that extends from the base infer interface
-"""
-import os
-from os.path import exists
-from joblib import load
-import logging
-
 from flask import Flask
 from flask import request as call_request
 
-from tf_template import Model, TextProcess
+from tf_template import Model, TextProcess, AVAILABLE_GPUS
 
 app = Flask(__name__)
 
-text_process = None
-model = None
 
+def initialize_app():
+    
+    app.logger.info(f"Num GPUs Available: {len(AVAILABLE_GPUS)}")
 
-def init():
-    """
-    Load the model if it is available locally
-    """
-    import tensorflow as tf
-    import logging
-    logging.info(f"Num GPUs Available: {len(tf.config.list_physical_devices('GPU'))}")
+    text_process = TextProcess()
+    model = Model()
 
-    global text_process, model
-    #
-    # Load text pre and post processor
-    text_process = TextProcess(os.environ['SERVE_FILES_PATH'])
-    text_process.max_pad_len
-    #
-    # load model
-    model = Model(
-        os.environ['SERVE_FILES_PATH']
-    )
-
-    return None
+    return text_process, model
 
 
 @app.route("/v1/predict", methods=["POST"])
-def predict():
-    """
-    Perform an inference on the model created in initialize
+def predict() -> str:
+    text_process = app.config['text_process']
+    model = app.config['model']
 
-    Returns:
-        String prediction of the label for the given test data
-    """
-    global model, text_process
-    #
     input_data = dict(call_request.json)
     text = str(input_data['text'])
-    #
-    # Log first
-    logging.info("Requested text: " +
-        str(text)
-    )
-    #
-    # Prediction
+
+    app.logger.info(f'Requested text: {text}')
     prediction = model.predict(
-        text_process.pre_process([text]) # Important to pass as list
+        text_process.pre_process(text)
     )
-    logging.info(f"Prediction: {str(prediction)}")
-    #
-    output = text_process.post_process(prediction)
-    #
-    # Response
-    return output
+
+    app.logger.info(f"Prediction: {prediction}")
+
+    return text_process.post_process(prediction)
 
 
 if __name__ == "__main__":
-    init()
+    with app.app_context():
+        text_process, model = initialize_app()
+
+    app.config['text_process'] = text_process
+    app.config['model'] = model
     app.run(host="0.0.0.0", debug=True, port=9001)
 
 # curl --location --request POST 'http://localhost:9001/v1/predict' --header 'Content-Type: application/json' --data-raw '{"text": "A restaurant with great ambiance"}'

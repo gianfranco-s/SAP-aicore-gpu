@@ -1,4 +1,4 @@
-FROM tensorflow/tensorflow:latest-gpu
+FROM tensorflow/tensorflow:2.10.0-gpu-jupyter
 
 ENV LANG C.UTF-8
 

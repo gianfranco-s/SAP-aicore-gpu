@@ -18,6 +18,12 @@ image: "docker.io/gsalomone/movie-review-clf-serve:0.0.2"
 ```
 cat requirements.txt | xargs poetry add
 ```
+2. Run the local server
+```
+export SERVE_FILES_PATH=tf_files && python server/serve.py 
+```
+
+
 
 Error
 ```
