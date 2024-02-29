@@ -15,11 +15,11 @@ class Model:
     A class representing a machine learning model for prediction.
 
     Parameters:
-    - source_path (str): The path to the directory containing the model file. Default is 'tf_files'.
+    - source_path: The path to the directory containing the model file. Default is 'tf_files'.
 
     Attributes:
-    - source_path (str): The path to the directory containing the model file.
-    - model (tf.keras.Model): The loaded TensorFlow/Keras model.
+    - source_path: The path to the directory containing the model file.
+    - model: The loaded TensorFlow/Keras model.
     """
     def __init__(self, source_path: str = SERVE_PATH) -> None:
         self.source_path = source_path
@@ -48,13 +48,13 @@ class TextProcess:
     A class for text processing including tokenization, padding, and post-processing predictions.
 
     Parameters:
-    - source_path (str): The path to the directory containing the required files. Default is 'tf_files'.
+    - source_path: The path to the directory containing the required files. Default is 'tf_files'.
 
     Attributes:
-    - source_path (str): The path to the directory containing the required files.
-    - max_pad_len (int): The maximum length for padding sequences.
-    - encoder (LabelEncoder): The label encoder for mapping classes to integers.
-    - tokenizer (keras.preprocessing.text.Tokenizer): The text tokenizer.
+    - source_path: The path to the directory containing the required files.
+    - max_pad_len: The maximum length for padding sequences.
+    - encoder: The label encoder for mapping classes to integers.
+    - tokenizer: The text tokenizer.
     """
     def __init__(self, source_path: str = SERVE_PATH) -> None:
         self.source_path = source_path
