@@ -1,16 +1,5 @@
----
-jupyter:
-  jupytext:
-    text_representation:
-      extension: .md
-      format_name: markdown
-      format_version: '1.3'
-      jupytext_version: 1.16.1
-  kernelspec:
-    display_name: Python 3 (ipykernel)
-    language: python
-    name: python3
----
+# Use Pre-Trained Tensorflow Models with a GPU in SAP AI Core
+Jupyter-notebook destined to walk you thorough [this tutorial](https://developers.sap.com/tutorials/ai-core-tensorflow-byod.html).
 
 ```python
 import json
