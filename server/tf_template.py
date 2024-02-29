@@ -20,16 +20,13 @@ class Model:
         model_filepath = os.path.join(self.source_path, filename)
         self.model = keras.models.load_model(model_filepath, compile=False)
 
-    def predict(self, seq: np.ndarray) -> str:
+    def predict(self, seq: np.ndarray) -> np.ndarray:
         '''
         Parameters
         ---
         seq : numpy.ndarray
           <1, MAX_PAD_LEN>
         '''
-        print('-------------')
-        print(type(seq))
-        print(type(self.model.predict(seq)))
         return self.model.predict(seq)
 
 
@@ -70,7 +67,7 @@ class TextProcess:
         x_seq : numpy.ndarray shape <1, self.max_pad_len>
         '''
         x_seq = self.tokenizer.texts_to_sequences([sentence])
-        return keras.preprocessing.pad_sequences(x_seq, maxlen=self.max_pad_len)
+        return keras.utils.pad_sequences(x_seq, maxlen=self.max_pad_len)
 
     def post_process(self, prediction: np.ndarray) -> dict:
         '''Convert back to orginial class name
