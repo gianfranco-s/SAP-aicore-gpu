@@ -1,5 +1,11 @@
-There was a syntax error in serve.py. I removed `@app.before_first_request`
+## Workflow to get SAP AI Core's service key
+1. `cf login`
+2. `cf target -o baitcon.development -s default`
+3. `cf services | grep aicore`  # To find which aicore services are running. In our case we should only find *default_aicore*
+4. `cf service-keys default_aicore`  # To list service keys associated with the service
+5. `cf service-key default_aicore <service-key-name> | sed 1,2d > default_aicore2.json`
 
+## Workflow to update serve files
 1. Create and push a new docker image
 ```
 cd server
