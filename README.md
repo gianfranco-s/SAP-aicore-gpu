@@ -22,9 +22,11 @@ cat requirements.txt | xargs poetry add
 2. Run the local server
 ```
 export SERVE_FILES_PATH=tf_files && python server/serve.py 
+
+# export SERVE_FILES_PATH=../tf_files && gunicorn --chdir server serve:app -b 0.0.0.0:9001
 ```
 
-3. Test with
+1. Test with
 ```
 curl --location --request POST 'http://localhost:9001/v1/predict' --header 'Content-Type: application/json' --data-raw '{"text": "A restaurant with great ambiance"}'
 ```
@@ -35,9 +37,6 @@ Response:
   "negative": 0.5039926171302795
 }
 ```
-
-Add logger:
-- In serve.py
 
 Update images:
 - In `Set up serving code`: 
